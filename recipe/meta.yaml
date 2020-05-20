@@ -2,12 +2,20 @@
 {% set version = "8.0.192" %}
 {% set zulu_build = "8.33.0.1" %}
 {% set build_number = 1004 %}
+{% set adopt_openjdk_build = "252-b09" %}
+{% set adopt_openjdk_build2 = "252b09" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
+  - url: https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u{{ adopt_openjdk_build }}/OpenJDK8U-jdk_ppc64le_linux_hotspot_8u{{ adopt_openjdk_build2 }}.tar.gz   # [ppc64le]
+    sha256: 55f0453b1d28812154138cf52b17b7acd93b9e55263f1f508f559795d31b2671  # [ppc64le]
+
+  - url: https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u{{ adopt_openjdk_build }}/OpenJDK8U-jdk_aarch64_linux_hotspot_8u{{ adopt_openjdk_build2 }}.tar.gz   # [aarch64]
+    sha256: 536bf397d98174b376da9ed49d2f659d65c7310318d8211444f4b7ba7c15e453  # [aarch64]
+
   - url: https://cdn.azul.com/zulu/bin/zulu{{ zulu_build }}-jdk{{ version }}-linux_x64.tar.gz  # [linux64]
     sha256: 95a33bfc8de5b88b07d29116edd4485a59182921825e193f68fe494b03ab3523  # [linux64]
 
@@ -17,9 +25,9 @@ source:
   - url: https://cdn.azul.com/zulu/bin/zulu{{ zulu_build }}-jdk{{ version }}-win_x64.zip  # [win64]
     sha256: 047330e7d9a4442583efecc786503b2624903d7a10da5ab6e94beca6cc2ef622  # [win64]
 
-  - url: https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip  # [linux64]
-    sha256: 7576310b219e04159d35ff61dd4a4ec4cdba4f35c00e002a136f00e96a908b0a  # [linux64]
-    folder: fonts  # [linux64]
+  - url: https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip  # [linux]
+    sha256: 7576310b219e04159d35ff61dd4a4ec4cdba4f35c00e002a136f00e96a908b0a  # [linux]
+    folder: fonts  # [linux]
 
 build:
   number: {{ build_number }}
@@ -37,12 +45,14 @@ test:
     - ./test-jni.sh  # [not win]
 
 about:
-  home: https://www.azul.com/products/zulu/
+  home: https://www.azul.com/products/zulu/   # [not linux]
+  home: https://openjdk.java.net   # [linux]
   license: GPL-2.0
   license_family: GPL
   license_file: '{{ environ["RECIPE_DIR"] }}/LICENSE'
-  summary: The Zulu OpenJDK build.
-  description: Zulu OpenJDK is an open source build of the Java JDK.
+  summary: The Zulu OpenJDK build.   # [not linux]
+  summary: An open-source implementation of the JDK   # [linux]
+  description: Zulu OpenJDK is an open source build of the Java JDK.  # [not linux]
 
 extra:
   recipe-maintainers:

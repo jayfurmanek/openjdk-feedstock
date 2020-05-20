@@ -11,15 +11,23 @@ if [ -e ./jre/lib/jspawnhelper ]; then
     chmod +x ./jre/lib/jspawnhelper
 fi
 
+if [[ ${target_platform} == linux-ppc64le ]]; then
+   ARCH=ppc64le
+fi
+
+if [[ ${target_platform} == linux-aarch64 ]]; then
+   ARCH=aarch64
+fi
+
 if [[ `uname` == "Linux" ]]
 then
-    mv lib/amd64/jli/*.so lib
-    mv lib/amd64/*.so lib
-    rm -r lib/amd64
+    mv lib/$ARCH/jli/*.so lib
+    mv lib/$ARCH/*.so lib
+    rm -r lib/$ARCH
     # libnio.so does not find this within jre/lib/amd64 subdirectory
-    cp jre/lib/amd64/libnet.so lib
+    cp jre/lib/$ARCH/libnet.so lib
     # libjvm.so isn't found
-    cp jre/lib/amd64/server/libjvm.so lib
+    cp jre/lib/$ARCH/server/libjvm.so lib
 
     # Include dejavu fonts to allow java to work even on minimal cloud
     # images where these fonts are missing (thanks to @chapmanb)
